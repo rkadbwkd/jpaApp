@@ -17,14 +17,18 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne
+    //ManyToOne은 Lazy로 바꿔줘야함
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
     private Member member;
+    
+    //JPQL select o From order o ; -> select * from order ( N + 1 ) 문제 발생 >> 지연로딩으로 변경을해야함
+    // @ManytoOne vs @OnetoOne Lazy 방식이 다름
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
