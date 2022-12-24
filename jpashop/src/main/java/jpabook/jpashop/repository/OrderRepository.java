@@ -17,7 +17,7 @@ public class OrderRepository {
     }
     
     public Order findOne(Long id){
-        return em.find(Order.class,id)
+        return em.find(Order.class,id);
         
     }
     // 동적쿼리 추후 수정예쩡
