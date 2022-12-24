@@ -71,4 +71,66 @@ public class Order {
        this.delivery = delivery;
        delivery.setOrder(this);
     }
-}
+
+    //==생성 메서드==/
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems){
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for(OrderItem orderItem : orderItems){
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+
+
+    }
+
+    /**
+     * 주문 취소
+    * */
+
+    public void cancel(){
+        if (delivery.getStatus() == DeleveryStatus.COMP) // 배송완료
+            throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다");
+
+        this.setStatus(OrderStatus.CANCEL);
+        for(OrderItem orderItem : orderItems){
+            orderItem.cancel(); // 회원이 여러개의 상품을 주문시
+        }
+
+    }
+
+    //==조회 로직==/
+    /**
+     * 전체 주문 가격 조회
+     * */
+
+    public int getTotalPrice() {
+//        int totalPrice = 0;
+
+        //alt + enter
+        int totalPrice = orderItems.stream()
+                .mapToInt(OrderItem::getTotalPrice)
+                .sum();
+        //위와 같은로직
+
+//        int totalPrice = 0;
+//        for(OrderItem orderItem : orderItems) {
+//            totalPrice += orderItem.getTotalPrice();
+//        }
+
+
+
+//        for(OrderItem orderItem : orderItems) {
+//            totalPrice += orderItem.getTotalPrice();
+//        }
+        return totalPrice;
+
+    }
+
+    }
+
+
+
