@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //@Controller @RequestBody
 @RestController
@@ -17,6 +19,37 @@ import javax.validation.Valid;
 public class MemberApiController {
 
     private final MemberService memberService;
+
+    //entity 직접 잔환 X
+    @GetMapping("/api/v1/members")
+    public List<Member> memberV1(){
+        return memberService.findMembers();
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result memberV2(){
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> collect = findMembers.stream()
+                .map(m-> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+
+        return new Result(collect.size(), collect);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T>{ private int count;
+       private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto{
+        private String name;
+        //private String
+
+    }
+
 
     @PostMapping("/api/v1/members") //@RequestBody == Json으로 온 내용을 Member로 바꿔줌
                                     //API 개발시 파라미터로 Entity를 받지 말것. V2에서 해결
