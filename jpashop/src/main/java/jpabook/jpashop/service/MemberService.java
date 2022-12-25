@@ -57,5 +57,9 @@ public class MemberService {    // 등록(join시는 따로 Annotation
     }
 
 
-
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
+    }
 }
