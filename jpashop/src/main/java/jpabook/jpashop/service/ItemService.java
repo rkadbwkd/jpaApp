@@ -36,8 +36,8 @@ public class ItemService {
     @Transactional // 변경??
     public void updateItem(Long itemId, String name, int price, int stockQuantity){
         Item findItem = itemRepository.findOne(itemId);
-        findItem.setPrice(name);
-        findItem.setName(price);
+        findItem.setName(name);
+        findItem.setPrice(price);
         findItem.setStockQuantity(stockQuantity);
         // ... Transactional Annotation으로 인하여( 영속상태 이므로) flush()코드 수행
 
