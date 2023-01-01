@@ -57,6 +57,18 @@ public class OrderSimpleApiController {
         //Order 조회시 3개의 테이블 ( Member ,Order , Delivery 조회필요)
     }
 
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> orderV3(){
+
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
+        return result;
+
+    }
+
+
     @Data
     static class SimpleOrderDto{
 
